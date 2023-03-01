@@ -1,4 +1,7 @@
 import * as express from 'express';
+import 'express-async-errors';
+import teamRoutes from './api/routes/teamRoutes';
+import ErrorHandler from './api/middlewares/ErrorHandler';
 
 class App {
   public app: express.Express;
@@ -7,6 +10,9 @@ class App {
     this.app = express();
 
     this.config();
+
+    this.initRoutes();
+    this.initMiddlewares();
 
     // Não remover essa rota
     this.app.get('/', (req, res) => res.json({ ok: true }));
@@ -22,6 +28,14 @@ class App {
 
     this.app.use(express.json());
     this.app.use(accessControl);
+  }
+
+  private initRoutes(): void {
+    this.app.use(teamRoutes);
+  }
+
+  private initMiddlewares() {
+    this.app.use(ErrorHandler.handle);
   }
 
   public start(PORT: string | number):void {
