@@ -2,11 +2,8 @@ import { ModelStatic } from 'sequelize';
 // import Post from "../../database/models/PostModel";
 import Team from '../../database/models/TeamModel';
 import IdNotFoundError from '../errors/IdNotFoundError';
-// import IPost from "../interfaces/IPost";
-// import IServicePost from "../interfaces/IServicePost";
+// import ITeam from '../interfaces/ITeam';
 import IServiceTeam from '../interfaces/IServiceTeam';
-
-const ID_NOT_FOUND = 'ID não existe';
 
 export default class TeamService implements IServiceTeam {
   protected model: ModelStatic<Team> = Team;
@@ -21,7 +18,7 @@ export default class TeamService implements IServiceTeam {
 
   async readById(teamId: number): Promise<Team> {
     const team = await this.model.findOne({ where: { id: teamId } });
-    if (!team) throw new IdNotFoundError(ID_NOT_FOUND);
+    if (!team) throw new IdNotFoundError('Id Not Found');
     return team;
   }
 

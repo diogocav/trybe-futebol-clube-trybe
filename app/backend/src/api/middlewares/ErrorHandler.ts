@@ -11,7 +11,7 @@ class ErrorHandler {
       return res.status(parseInt(err.stack, 10)).json({ message: err.message });
     }
 
-    return res.status(500).json({ message: 'Erro não identificado' });
+    return res.status(500).json({ message: 'Unidentified Error' });
   }
 }
 
