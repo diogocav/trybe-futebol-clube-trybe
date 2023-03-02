@@ -11,5 +11,10 @@ loginRoutes.post(
   ValidateFields.login,
   (req: Request, res:Response) => loginController.validate(req, res),
 );
+loginRoutes.get(
+  '/login/role',
+  ValidateFields.token,
+  (req: Request, res:Response) => loginController.getRole(req, res),
+);
 
 export default loginRoutes;
