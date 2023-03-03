@@ -4,6 +4,7 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
+import User from '../database/models/UserModel'
 
 import { Response } from 'superagent';
 
@@ -164,9 +165,92 @@ describe('endpoint /login/role', () => {
     .get('/login/role')
     .set('Authorization', token)
 
-    // expect(chaiHttpResponse.status).to.be.equal(200);
-    // expect(chaiHttpResponse.body).to.exist;
-    // expect(chaiHttpResponse.body.role).to.exist;
+    expect(chaiHttpResponse.status).to.be.equal(200);
+    expect(chaiHttpResponse.body).to.exist;
+    expect(chaiHttpResponse.body.role).to.exist;
+  });
+
+  it('que não é possível sem token', async () => {
+    let chaiHttpResponse: Response;
+
+    chaiHttpResponse = await chai
+    .request(app)
+    .get('/login/role')
+
+    expect(chaiHttpResponse.status).to.be.equal(401);
+    expect(chaiHttpResponse.body.message).to.be.equal('Token not found')
+  });
+
+  // it('que não é possível com token invalido', async () => {
+  //   let chaiHttpResponse: Response;
+
+  //   const jwtPayload = 'teste'
+  //   const jwtVerifyStub = sinon.stub(jwt, 'verify');
+  //   jwtVerifyStub.returns(jwtPayload);
+  
+  //   after(()=>{
+  //     (jwt.verify as sinon.SinonStub).restore();
+  //   })
+
+  //   const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIn0sImlhdCI6MTY3Nzc4NTI3MiwiZXhwIjoxNjc4MzkwMDcyfQ.FB4rst1QZufAAflnvxtDZSyISVO1Dgg3-WXHYFbW'
+
+  //   chaiHttpResponse = await chai
+  //   .request(app)
+  //   .get('/login/role')
+  //   .set('Authorization', token)
+
+  //   expect(chaiHttpResponse.status).to.be.equal(401);
+  //   expect(chaiHttpResponse.body.message).to.be.equal('Token must be a valid token')
+  // });
+  
+  it('que não é possível com token invalido', async () => {
+    let chaiHttpResponse: Response;
+    
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImVtYWlsIjoiYWRtaW5AYWRtaW4uY29tIn0sImlhdCI6MTY3Nzc4NTI3MiwiZXhwIjoxNjc4MzkwMDcyfQ.FB4rst1QZufAAflnvxtDZSyISVO1Dgg3-WXHYFbW'
+    
+    chaiHttpResponse = await chai
+    .request(app)
+    .get('/login/role')
+    .set('Authorization', token)
+    
+    expect(chaiHttpResponse.status).to.be.equal(401);
+    expect(chaiHttpResponse.body.message).to.be.equal('Token must be a valid token')
+  });
+
+  it('que não é possível com token invalido', async () => {
+    let chaiHttpResponse: Response;
+  
+    after(()=>{
+      (User.findOne as sinon.SinonStub).restore();
+    })
+
+    const user = {
+        "email": "admin@admin.com",
+        "password": "secret_admin"
+      }
+
+    chaiHttpResponse = await chai
+       .request(app)
+       .post('/login')
+       .send(user)
+
+    expect(chaiHttpResponse.status).to.be.equal(200);
+    expect(chaiHttpResponse.body).to.exist;
+    expect(chaiHttpResponse.body.token).to.exist;
+
+    const token = chaiHttpResponse.body.token
+
+    sinon
+    .stub(User, "findOne")
+    .resolves(undefined);
+
+    chaiHttpResponse = await chai
+    .request(app)
+    .get('/login/role')
+    .set('Authorization', token)
+
+    expect(chaiHttpResponse.status).to.be.equal(401);
+    expect(chaiHttpResponse.body.message).to.be.equal('Token must be a valid token')
   });
 })
 })

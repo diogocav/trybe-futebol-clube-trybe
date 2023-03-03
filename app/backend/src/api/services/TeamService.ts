@@ -1,5 +1,4 @@
 import { ModelStatic } from 'sequelize';
-// import Post from "../../database/models/PostModel";
 import Team from '../../database/models/TeamModel';
 import IdNotFoundError from '../errors/IdNotFoundError';
 // import ITeam from '../interfaces/ITeam';

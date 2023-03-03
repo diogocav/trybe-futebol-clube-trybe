@@ -1,4 +1,3 @@
-// import IServicePost from '../interfaces/IServicePost';
 import { Request, Response } from 'express';
 import IServiceTeam from '../interfaces/IServiceTeam';
 
