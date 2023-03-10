@@ -25,6 +25,12 @@ class MatchController {
     const result = await this._service.readAll(inProgress);
     return res.status(200).json(result);
   }
+
+  async updateProgress(req: Request, res: Response) {
+    const { id } = req.params;
+    await this._service.updateProgress(parseInt(id, 10));
+    return res.status(200).json({ message: 'Finished' });
+  }
 }
 
 export default MatchController;

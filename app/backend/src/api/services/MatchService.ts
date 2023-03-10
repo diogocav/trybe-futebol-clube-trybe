@@ -31,9 +31,15 @@ export default class MatchService implements IServiceMatch {
   //     return team;
   //   }
 
-//   update(id: string, dto: IPost): Promise<Post> {
-//     throw new Error("Method not implemented.");
-//   }
+  async updateProgress(id: number): Promise<void> {
+    const [affectedCount] = await this.model.update(
+      { inProgress: false },
+      { where: {
+        id,
+      } },
+    );
+    if (affectedCount !== 1) throw new Error(`invalid id ${affectedCount}`);
+  }
 //   delete(id: string): Promise<void> {
 //     throw new Error("Method not implemented.");
 //   }
