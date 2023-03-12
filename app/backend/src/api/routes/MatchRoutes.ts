@@ -6,13 +6,21 @@ import ValidateFields from '../middlewares/validateFields';
 const matchRoutes = Router();
 const matchService = new MatchService();
 const matchController = new MatchController(matchService);
-// postRoutes.post('/teams', (req: Request, res:Response) => postController.create(req, res));
 matchRoutes.get('/matches', (req: Request, res:Response) => matchController.readAll(req, res));
-// teamRoutes.get('/teams/:id', (req: Request, res:Response) => teamController.readById(req, res));
+matchRoutes.post(
+  '/matches',
+  ValidateFields.token,
+  (req: Request, res:Response) => matchController.create(req, res),
+);
 matchRoutes.patch(
   '/matches/:id/finish',
   ValidateFields.token,
   (req: Request, res:Response) => matchController.updateProgress(req, res),
+);
+matchRoutes.patch(
+  '/matches/:id',
+  ValidateFields.token,
+  (req: Request, res:Response) => matchController.updateScore(req, res),
 );
 
 export default matchRoutes;

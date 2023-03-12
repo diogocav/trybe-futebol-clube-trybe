@@ -1,16 +1,32 @@
-import { ModelStatic } from 'sequelize';
+import { ModelStatic, Op } from 'sequelize';
 import Team from '../../database/models/TeamModel';
 import Match from '../../database/models/MatchModel';
 // import IdNotFoundError from '../errors/IdNotFoundError';
 import IServiceMatch from '../interfaces/IServiceMatch';
-// import ITeam from '../interfaces/ITeam';
+import IMatch from '../interfaces/IMatch';
+import InvalidTeamIdError from '../errors/InvalidTeamIdError';
+import NonExistentTeamId from '../errors/NonExistentTeamId';
 
 export default class MatchService implements IServiceMatch {
   protected model: ModelStatic<Match> = Match;
 
-  //   async create(dto: IPost): Promise<Post> {
-  //     return await this.model.create({ ...dto });
-  //   }
+  async create(dto: IMatch): Promise<Match> {
+    if (dto.awayTeamId === dto.homeTeamId) {
+      throw new InvalidTeamIdError('It is not possible to create a match with two equal teams');
+    }
+    const results = await Team.findAll({
+      where: {
+        id: {
+          [Op.or]: [dto.homeTeamId, dto.awayTeamId],
+        },
+      },
+    });
+    if (results.length !== 2) {
+      throw new NonExistentTeamId('There is no team with such id!');
+    }
+    return this.model.create({ ...dto, inProgress: true });
+  }
+
   async readAll(inProgress: string | undefined | string[]): Promise<Match[]> {
     let where = {};
     if (inProgress === 'true') where = { inProgress: true };
@@ -40,6 +56,18 @@ export default class MatchService implements IServiceMatch {
     );
     if (affectedCount !== 1) throw new Error(`invalid id ${affectedCount}`);
   }
+
+  async updateScore(id: number, dto: IMatch): Promise<void> {
+    const { awayTeamGoals, homeTeamGoals } = dto;
+    const [affectedCount] = await this.model.update(
+      { awayTeamGoals, homeTeamGoals },
+      { where: {
+        id,
+      } },
+    );
+    if (affectedCount !== 1) throw new Error(`invalid id ${affectedCount}`);
+  }
+
 //   delete(id: string): Promise<void> {
 //     throw new Error("Method not implemented.");
 //   }

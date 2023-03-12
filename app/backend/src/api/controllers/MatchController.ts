@@ -8,11 +8,12 @@ class MatchController {
     this._service = service;
   }
 
-  //   async create(req: Request, res: Response) {
-  //     const { title, content } = req.body;
-  //     const result = await this._service.create({ title, content })
-  //     return res.status(201).json(result);
-  //   }
+  async create(req: Request, res: Response) {
+    const { homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals } = req.body;
+    const result = await this._service
+      .create({ homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals });
+    return res.status(201).json(result);
+  }
 
   //   async readById(req: Request, res: Response) {
   //     const { id } = req.params;
@@ -30,6 +31,13 @@ class MatchController {
     const { id } = req.params;
     await this._service.updateProgress(parseInt(id, 10));
     return res.status(200).json({ message: 'Finished' });
+  }
+
+  async updateScore(req: Request, res: Response) {
+    const { id } = req.params;
+    const dto = req.body;
+    await this._service.updateScore(parseInt(id, 10), dto);
+    return res.status(200).json({ message: 'Updated' });
   }
 }
 
