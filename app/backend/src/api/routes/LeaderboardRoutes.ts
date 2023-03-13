@@ -12,20 +12,9 @@ leaderboardRoutes.get(
   '/leaderboard',
   (req: Request, res:Response) => leaderboardController.readAll(req, res),
 );
-// matchRoutes.post(
-//   '/matches',
-//   ValidateFields.token,
-//   (req: Request, res:Response) => matchController.create(req, res),
-// );
-// matchRoutes.patch(
-//   '/matches/:id/finish',
-//   ValidateFields.token,
-//   (req: Request, res:Response) => matchController.updateProgress(req, res),
-// );
-// matchRoutes.patch(
-//   '/matches/:id',
-//   ValidateFields.token,
-//   (req: Request, res:Response) => matchController.updateScore(req, res),
-// );
+leaderboardRoutes.get(
+  '/leaderboard/home',
+  (req: Request, res:Response) => leaderboardController.readHome(req, res),
+);
 
 export default leaderboardRoutes;

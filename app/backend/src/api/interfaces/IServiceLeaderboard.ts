@@ -5,11 +5,7 @@
 import ITeamClassification from './ITeamClassification';
 
 export default interface IServiceLeaderboard {
-//   create(dto: IMatch): Promise<Match>;
   readAll(): Promise<ITeamClassification[]>;
-//   readAll(inProgress: string | undefined | string[]): Promise<Match[]>;
-  //   readById(id: number): Promise<Match>;
-//   updateProgress(id: number): Promise<void>;
-//   updateScore(id: number, dto: IMatch): Promise<void>;
-//   delete(id: string): Promise<void>;
+  readHome(): Promise<ITeamClassification[]>;
+
 }
