@@ -190,6 +190,6 @@ Esta rota finaliza a partida em andamento de número _${id}_.
 
 (Atualizado até a 2a rodada, em 07/março/2023)
 ## 🔗 Links
-[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)]([https://www.linkedin.com/in/jefferson-felix/](https://www.linkedin.com/in/diogocav/)https://www.linkedin.com/in/diogocav/)
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/diogocav/)
 
 
